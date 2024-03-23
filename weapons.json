@@ -1,0 +1,110 @@
+
+[
+  {
+    "can_use": false,
+    "name": "Обычная вещь",
+    "price": 400,
+    "description": "Просто рандомный дамаг :)",
+    "exclusive": false,
+    "hitbox": "stick.png",
+    "value": 1,
+    "random": 200,
+    "items": "weapon"
+  },
+  {
+    "can_use": false,
+    "name": "Нож",
+    "price": 400,
+    "description": "Обычный нож, ничего примечательного",
+    "exclusive": false,
+    "hitbox": "regular_knife.png",
+    "value": 50,
+    "items": "weapon"
+  },
+  {
+    "can_use": false,
+    "name": "Хэллоуинская коса",
+    "price": 166,
+    "description": "Страшно? Мне очень",
+    "exclusive": true,
+    "hitbox": "halloween_scythe.png",
+    "value": 100,
+    "items": "weapon"
+  },
+  {
+    "can_use": false,
+    "name": "Новогодний топор",
+    "price": 200,
+    "description": "Чувствуется вкус мандаринов",
+    "exclusive": true,
+    "hitbox": "xmasaxe.png",
+    "value": 100,
+    "items": "weapon"
+  },
+  {
+    "can_use": false,
+    "name": "Оружие демона",
+    "price": 303,
+    "description": "Не один демон не пострадал",
+    "exclusive": false,
+    "hitbox": "demonweapon.png",
+    "value": 101,
+    "items": "weapon"
+  },
+  {
+    "can_use": false,
+    "name": "error",
+    "price": 4040,
+    "description": "Кажется, с этим мечом что-то не так, хотя урон большой, поэтому стоит привыкнуть",
+    "exclusive": true,
+    "hitbox": "errorknife.png",
+    "value": 404,
+    "items": "weapon"
+  },
+  {
+    "can_use": false,
+    "name": "Крутое оружие",
+    "price": 10000,
+    "description": "Стоит много, надо проверить урон",
+    "exclusive": true,
+    "hitbox": "rainbowknife.png",
+    "value": 10000,
+    "items": "weapon"
+  },
+  {
+    "can_use": true,
+    "name": "Зелье восстановления I",
+    "price": 130,
+    "description": "Пахнет яблоком, чувствуется начало заживление ран",
+    "exclusive": false,
+    "hitbox": "healingpotion.png",
+    "value": 50,
+    "items": "potion",
+    "types": "healing",
+    "chance": 60
+  },
+  {
+    "can_use": true,
+    "name": "Зелье восстановления II",
+    "price": 180,
+    "description": "Вы чувствуете, что ваши раны частично излечились",
+    "exclusive": false,
+    "hitbox": "healingpotion2.png",
+    "value": 70,
+    "items": "potion",
+    "types": "healing",
+    "chance": 30
+  },
+    {
+    "can_use": true,
+    "name": "Зелье восстановления III",
+    "price": 230,
+    "description": "Вы чувствуете силы идти дальше. Ваши раны полностью излечились",
+    "exclusive": false,
+    "hitbox": "healingpotion3.png",
+    "value": 90,
+    "items": "potion",
+    "types": "healing",
+    "chance": 10
+  }
+]
