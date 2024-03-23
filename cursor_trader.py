@@ -2,7 +2,7 @@ import pygame
 import sys
 from settings import S_WIDTH, S_HEIGHT
 import random
-from settings import FONT_COMIC_32
+from settings import FONT_COMIC_32,FONT_CALIBRI_50
 from functions import json_read
 import math
 
@@ -43,6 +43,9 @@ class Trader_menu:
         self.player_balance = 10000
         self.can_be_bought = True
         self.bought_endtimer = 0
+        self.coin_image = pygame.image.load("images/trader/goblicoin.png")
+        self.coin_image = pygame.transform.smoothscale(self.coin_image,(self.coin_image.get_width()/2,self.coin_image.get_height()/2))
+        self.coin_rect = self.coin_image.get_rect(x=self.balance_rect.x + 15,centery=self.balance_rect.centery)
 
     def draw(self, screen):
         self.bought_endtimer += clock.get_time()
@@ -79,7 +82,12 @@ class Trader_menu:
 
     def draw_balance(self,screen):
         pygame.draw.rect(screen,(80, 80, 80),self.balance_rect,border_radius=10)
-
+        screen.blit(self.coin_image,self.coin_rect)
+        self.draw_balance_text(screen)
+    def draw_balance_text(self,screen):
+        text_image = FONT_CALIBRI_50.render(str(self.player_balance), True, (255, 215, 0))
+        text_rect = text_image.get_rect(x=self.balance_rect.centerx,centery=self.balance_rect.centery)
+        screen.blit(text_image,text_rect)
 
 class Trader_menu_row:
     def __init__(self, pos, info, item_inv):
@@ -353,20 +361,20 @@ class Player:
                 return True, num
         return False, None
 
-
-w, h = (1920, 1080)
-screensize = w, h
-color = (200, 55, 86)
-yellow = (240, 240, 0)
-clock = pygame.time.Clock()
-screen = pygame.display.set_mode(screensize)
-menu = Trader_menu()
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-    screen.fill(color)
-    menu.draw(screen)
-    pygame.display.flip()
-    clock.tick(60)
+if __name__ == '__main__':
+    w, h = (1920, 1080)
+    screensize = w, h
+    color = (200, 55, 86)
+    yellow = (240, 240, 0)
+    clock = pygame.time.Clock()
+    screen = pygame.display.set_mode(screensize)
+    menu = Trader_menu()
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+        screen.fill(color)
+        menu.draw(screen)
+        pygame.display.flip()
+        clock.tick(60)

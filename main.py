@@ -12,7 +12,7 @@ from enemies import Enemy
 from event_objects import Object
 from tile import Tile
 from map import temp
-
+from cursor_trader import Trader_menu
 class Main:
     def __init__(self):
         self.current_window = Main_menu(True)
@@ -168,7 +168,8 @@ class Main_menu:
 
 
 class Battle:
-    def __init__(self, type_, room, map, x, y, size_of_map, local_map, used, ):
+    def __init__(self, type_, room, map, x, y, size_of_map, local_map, used,):
+        self.trader_menu = Trader_menu()
         self.class_type = "Battle"
         self.start_timer = pygame.time.get_ticks()
         self.enemy_hits = 0
@@ -189,6 +190,7 @@ class Battle:
         self.main_minimap_rect = pygame.Rect(0, 0, SCREEN_SIZE[0] / 3, SCREEN_SIZE[1] / 3)
         self.main_minimap_rect.topleft = SCREEN_SIZE[0] - 100, SCREEN_SIZE[1] - 100
         self.local_objects = self.setup_local_map(local_map)
+
 
     def draw(self, screen):
         screen.fill(self.color)
