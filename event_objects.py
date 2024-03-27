@@ -10,7 +10,7 @@ class Object():
         self.rect = pygame.Rect(pos, (TILE_WIDTH, TILE_HEIGHT))
         self.setup()
         self.player = None
-    def draw(self, screen):
+    def draw(self, screen,trader):
         self.dialogue_window.draw(screen)
         if self.dialogue_window.continue_:
             a = 0
@@ -22,6 +22,9 @@ class Object():
                 info = {"main_text":info,
                         "answers":["Уйти"]}
                 self.dialogue_window = Dialogue_window(info)
+            if self.dialogue_window.info.get("name") == "Trader":
+                if self.dialogue_window.continue_ == True:
+                    trader.active = True
             if self.dialogue_window.get_reward:
                 self.player.coins += self.dialogue_window.info.get("reward")
                 text = f"Ответ правильный. Вот ваша награда {self.dialogue_window.info.get('reward')} монет."

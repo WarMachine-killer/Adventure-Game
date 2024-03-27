@@ -53,6 +53,9 @@ class Dialogue_window:
                     self.active = False
                 if button.text in ("Продолжить", "Прочитать"):
                     self.continue_ = True
+                if button.text == "Посмотреть товары":
+                    self.active = False
+                    self.continue_ = True
                 if button.text == self.info.get("correct_answer"):
                     self.continue_ = True
                     self.get_reward = True

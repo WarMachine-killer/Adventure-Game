@@ -4,6 +4,7 @@ import math
 pygame.init()
 SCREEN_SIZE = S_WIDTH,S_HEIGHT = 1920, 1080
 fps = 60
+CLOCK = pygame.time.Clock()
 FONT20 = pygame.sysfont.SysFont("Arial", 20, bold=True)
 FONT21 = pygame.sysfont.SysFont("Arial", 21, bold=True)
 

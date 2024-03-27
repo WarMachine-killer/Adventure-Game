@@ -19,7 +19,7 @@ class Main:
         self.width, self.height = SCREEN_SIZE
         self.screen = pygame.display.set_mode(SCREEN_SIZE)
         self.fps = fps
-        self.clock = pygame.time.Clock()
+        self.clock = CLOCK
         self.player = Player(self.width / 2, self.height / 2, 20, 20)
         self.tile_width = MINIMAP_TILE_WIDTH
         self.tile_height = MINIMAP_TILE_HEIGHT
@@ -89,11 +89,11 @@ class Main:
             self.map[self.y][self.x] = new_room, map
             self.room_num += 1
             self.current_window = Battle(new_room, self.room_num, self.map, self.x, self.y,
-                                         (self.tile_width, self.tile_height), map, used=False)
+                                         (self.tile_width, self.tile_height), map,self.player,used=False)
         else:
             map = self.map[self.y][self.x][1]
             self.current_window = Battle(next_room, self.room_num, self.map, self.x, self.y,
-                                         (self.tile_width, self.tile_height), map, used=True)
+                                         (self.tile_width, self.tile_height), map,self.player,used=True)
 
     # self.current_window = Battle(random.choice(rooms))
 
@@ -168,8 +168,8 @@ class Main_menu:
 
 
 class Battle:
-    def __init__(self, type_, room, map, x, y, size_of_map, local_map, used,):
-        self.trader_menu = Trader_menu()
+    def __init__(self, type_, room, map, x, y, size_of_map, local_map, used,player):
+        self.trader_menu = Trader_menu(player.coins)
         self.class_type = "Battle"
         self.start_timer = pygame.time.get_ticks()
         self.enemy_hits = 0
@@ -199,6 +199,7 @@ class Battle:
         screen.blit(self.text, self.text_rect)
         self.draw_enemies(screen)
         self.draw_events(screen)
+        self.trader_menu.draw(screen)
         if self.active_minimap:
             scale = 2
             size = ((20 * scale) * self.tile_width) + ((10 * scale) * self.tile_height - 1)
@@ -222,19 +223,20 @@ class Battle:
 
     def draw_events(self, screen):
         for event in self.events:
-            event.draw(screen)
+            event.draw(screen,self.trader_menu)
 
     def update_events(self, player):
         for event in self.events:
             if event.dialogue_window.active == False:
-                if event.main_rect.colliderect(player.main_rect):
+                if event.rect.colliderect(
+                        player.rect):
                     event.dialogue_window.active = True
                     event.player = player
 
     def update_enemy(self, player_rect):
         for enemy in self.enemies[:]:
             enemy.move(player_rect.center, self.local_objects)
-            if player_rect.colliderect(enemy.main_rect):
+            if player_rect.colliderect(enemy.rect):
                 self.enemies.remove(enemy)
         if self.type_ == "Боёвка":
             current_timer = pygame.time.get_ticks()

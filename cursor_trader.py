@@ -2,15 +2,16 @@ import pygame
 import sys
 from settings import S_WIDTH, S_HEIGHT
 import random
-from settings import FONT_COMIC_32,FONT_CALIBRI_50
+from settings import FONT_COMIC_32,FONT_CALIBRI_50,CLOCK
 from functions import json_read
+
 import math
 
 pygame.init()
 
 
 class Trader_menu:
-    def __init__(self):
+    def __init__(self,player_balance):
         math_width = (S_WIDTH - S_WIDTH / 8)
         math_height = (S_HEIGHT - S_WIDTH / 8)
         math_head = (S_WIDTH / 8)
@@ -40,45 +41,47 @@ class Trader_menu:
             weapon = Trader_menu_row((self.sub_rect.left, y), weapon, None)
             y += 45
             self.weapons[index] = weapon
-        self.player_balance = 10000
+        self.player_balance = player_balance
         self.can_be_bought = True
         self.bought_endtimer = 0
         self.coin_image = pygame.image.load("images/trader/goblicoin.png")
         self.coin_image = pygame.transform.smoothscale(self.coin_image,(self.coin_image.get_width()/2,self.coin_image.get_height()/2))
         self.coin_rect = self.coin_image.get_rect(x=self.balance_rect.x + 15,centery=self.balance_rect.centery)
+        self.active = False
 
     def draw(self, screen):
-        self.bought_endtimer += clock.get_time()
-        pygame.draw.rect(screen, (100, 100, 100), self.main_rect, border_radius=20)
-        self.head.draw(screen)
-        self.draw_balance(screen)
-        pygame.draw.rect(screen, (80, 80, 80), self.sub_rect, border_radius=10)
-        self.rows_name.draw(screen)
-        for weapon in self.weapons:
-            weapon.draw(screen)
-        for prompt in self.weapons[::-1]:
-            if prompt.name != "Название":
-                x, y = pygame.mouse.get_pos()
-                if prompt.extra_glow and prompt.start_glow + 500 < pygame.time.get_ticks():
-                    prompt.extra_glow = False
-                    prompt.start_glow_bull = True
-                if prompt.rect.collidepoint(x, y):
-                    prompt.glow = True
-                    click = pygame.mouse.get_pressed()
-                    prompt.prompt.draw(screen, (x, y))
-                    self.head.mouth_type = "smiling"
-                    if click[0] and self.bought_endtimer in range(500, 1000):
-                        if self.player_balance >= prompt.price and prompt.trader_have >= 1 and not prompt.extra_glow:
-                            prompt.extra_glow = True
-                            self.head.mouth_type = "exciting"
-                            self.player_balance -= prompt.price
-                            prompt.trader_have -= 1
-                            self.bought_endtimer = 0
-                if prompt.extra_glow:
-                    self.head.mouth_type = "exciting"
+        if self.active == True:
+            self.bought_endtimer += CLOCK.get_time()
+            pygame.draw.rect(screen, (100, 100, 100), self.main_rect, border_radius=20)
+            self.head.draw(screen)
+            self.draw_balance(screen)
+            pygame.draw.rect(screen, (80, 80, 80), self.sub_rect, border_radius=10)
+            self.rows_name.draw(screen)
+            for weapon in self.weapons:
+                weapon.draw(screen)
+            for prompt in self.weapons[::-1]:
+                if prompt.name != "Название":
+                    x, y = pygame.mouse.get_pos()
+                    if prompt.extra_glow and prompt.start_glow + 500 < pygame.time.get_ticks():
+                        prompt.extra_glow = False
+                        prompt.start_glow_bull = True
+                    if prompt.rect.collidepoint(x, y):
+                        prompt.glow = True
+                        click = pygame.mouse.get_pressed()
+                        prompt.prompt.draw(screen, (x, y))
+                        self.head.mouth_type = "smiling"
+                        if click[0] and self.bought_endtimer in range(500, 1000):
+                            if self.player_balance >= prompt.price and prompt.trader_have >= 1 and not prompt.extra_glow:
+                                prompt.extra_glow = True
+                                self.head.mouth_type = "exciting"
+                                self.player_balance -= prompt.price
+                                prompt.trader_have -= 1
+                                self.bought_endtimer = 0
+                    if prompt.extra_glow:
+                        self.head.mouth_type = "exciting"
 
-        if self.bought_endtimer >= 1000:
-            self.bought_endtimer = 500
+            if self.bought_endtimer >= 1000:
+                self.bought_endtimer = 500
 
     def draw_balance(self,screen):
         pygame.draw.rect(screen,(80, 80, 80),self.balance_rect,border_radius=10)
@@ -157,15 +160,16 @@ class Interactive_face:
         self.mouth_rect = pygame.Rect((0, 0), (120, 156))
         self.black = (0, 0, 0)
         self.mouth_type = "normal"
+        self.yellow = (240, 240, 0)
 
     def draw(self, screen):
         self.update()
-        pygame.draw.circle(screen, yellow, self.head_rect.center, self.head_rect.width / 1.3)
+        pygame.draw.circle(screen, self.yellow, self.head_rect.center, self.head_rect.width / 1.3)
         if self.mouth_type == "exciting":
             pygame.draw.circle(screen, self.black, (self.eye_rect.centerx, self.eye_rect.centery + 130), 50, 5)
         elif self.mouth_type == "smiling":
             pygame.draw.circle(screen, self.black, (self.eye_rect.centerx, self.eye_rect.centery + 90), 60, 5)
-            pygame.draw.rect(screen, yellow, self.mouth_rect)
+            pygame.draw.rect(screen, self.yellow, self.mouth_rect)
         elif self.mouth_type == "normal":
             pygame.draw.line(screen, self.black, (self.eye_rect.left - 20, self.eye_rect.bottom + 40),
                              (self.eye_rect.right + 20, self.eye_rect.bottom + 40), width=5)

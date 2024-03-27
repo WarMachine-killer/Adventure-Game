@@ -67,7 +67,7 @@ class Enemy:
     def collide(self, obstacles, x_vel, y_vel):
         for object_ in obstacles:
             for wall in object_:
-                wall = wall.main_rect
+                wall = wall.rect
                 if self.rect.colliderect(wall):
                     if x_vel > 0:
                         self.rect.right = wall.left

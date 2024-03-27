@@ -87,7 +87,7 @@ class Player:
     def collide(self, obstacles, x_vel, y_vel):
         for object_ in obstacles:
             for wall_ in object_:
-                wall = wall_.main_rect
+                wall = wall_.rect
                 if self.rect.colliderect(wall):
                     if not wall_.interactive:
                         if x_vel > 0:
