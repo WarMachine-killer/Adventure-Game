@@ -168,8 +168,8 @@ class Main_menu:
 
 
 class Battle:
-    def __init__(self, type_, room, map, x, y, size_of_map, local_map, used,player):
-        self.trader_menu = Trader_menu(player.coins)
+    def __init__(self, type_, room, map, x, y, size_of_map, local_map,player,used):
+        self.trader_menu = Trader_menu(player)
         self.class_type = "Battle"
         self.start_timer = pygame.time.get_ticks()
         self.enemy_hits = 0

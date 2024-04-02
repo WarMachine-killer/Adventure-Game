@@ -12,6 +12,7 @@ FONT25 = pygame.sysfont.SysFont("Arial", 25, bold=False)
 FONT30 = pygame.sysfont.SysFont("Arial", 30, bold=False)
 
 FONT_CALIBRI_50 = pygame.sysfont.SysFont("Calibri", 50, bold=False)
+FONT_BOOK_ANTIQUA_40 = pygame.sysfont.SysFont("Book Antiqua", 40, False)
 FONT_COMIC_32 = pygame.sysfont.SysFont("Comis Sans", 32, bold=False)
 FONT_COMIC_27 = pygame.sysfont.SysFont("Comis Sans", 27, bold=True)
 FONT_COMIC_20 = pygame.sysfont.SysFont("Comis Sans", 20, bold=True)

@@ -30,9 +30,12 @@ class Player:
                               wall_gap + 400 + self.bg_inventory.y + gap * 2),
                           }
         self.coins = 0
+        self.active = True
+
 
     def draw(self, screen, ):
-        pygame.draw.rect(screen, self.color, self.rect)
+        if self.active:
+            pygame.draw.rect(screen, self.color, self.rect)
         if self.show_inventory:
             pygame.draw.rect(screen, (200, 200, 200), self.bg_inventory,border_radius=40)
             self.draw_inventory_items(screen)
@@ -79,10 +82,11 @@ class Player:
                 return True, num
         return False, None
     def move(self, obstacles):
-        self.rect.centerx += self.speedx
-        self.collide(obstacles, self.speedx, 0)
-        self.rect.centery += self.speedy
-        self.collide(obstacles, 0, self.speedy)
+        if self.active:
+            self.rect.centerx += self.speedx
+            self.collide(obstacles, self.speedx, 0)
+            self.rect.centery += self.speedy
+            self.collide(obstacles, 0, self.speedy)
 
     def collide(self, obstacles, x_vel, y_vel):
         for object_ in obstacles:

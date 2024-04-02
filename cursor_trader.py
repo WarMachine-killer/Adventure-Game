@@ -2,7 +2,7 @@ import pygame
 import sys
 from settings import S_WIDTH, S_HEIGHT
 import random
-from settings import FONT_COMIC_32,FONT_CALIBRI_50,CLOCK
+from settings import FONT_COMIC_32, FONT_CALIBRI_50, FONT_BOOK_ANTIQUA_40, CLOCK
 from functions import json_read
 
 import math
@@ -11,7 +11,7 @@ pygame.init()
 
 
 class Trader_menu:
-    def __init__(self,player_balance):
+    def __init__(self, player):
         math_width = (S_WIDTH - S_WIDTH / 8)
         math_height = (S_HEIGHT - S_WIDTH / 8)
         math_head = (S_WIDTH / 8)
@@ -21,10 +21,14 @@ class Trader_menu:
         self.sub_rect = pygame.Rect(0, 0, (math_width / 2 - 20), (math_height - 40))
         self.sub_rect.left = self.main_rect.left + 20
         self.sub_rect.top = self.main_rect.top + 20
-        self.balance_rect = pygame.Rect((0,0),(math_width/6,math_height/8))
+        self.balance_rect = pygame.Rect((0, 0), (math_width / 6, math_height / 8))
         self.balance_rect.topright = self.main_rect.topright
         self.balance_rect.right = self.main_rect.right - 20
         self.balance_rect.top = self.main_rect.top + 20
+        self.exit_rect = pygame.Rect((0, 0), (math_width / 7, math_height / 10))
+        self.exit_rect.bottomright = self.main_rect.bottomright
+        self.exit_rect.right = self.main_rect.right - 20
+        self.exit_rect.bottom = self.main_rect.bottom - 20
         self.info = {
             "name": "Название",
             "price": "Цена",
@@ -41,20 +45,24 @@ class Trader_menu:
             weapon = Trader_menu_row((self.sub_rect.left, y), weapon, None)
             y += 45
             self.weapons[index] = weapon
-        self.player_balance = player_balance
+        self.player_balance = player.coins
+        self.player = player
         self.can_be_bought = True
         self.bought_endtimer = 0
         self.coin_image = pygame.image.load("images/trader/goblicoin.png")
-        self.coin_image = pygame.transform.smoothscale(self.coin_image,(self.coin_image.get_width()/2,self.coin_image.get_height()/2))
-        self.coin_rect = self.coin_image.get_rect(x=self.balance_rect.x + 15,centery=self.balance_rect.centery)
+        self.coin_image = pygame.transform.smoothscale(self.coin_image, (
+            self.coin_image.get_width() / 2, self.coin_image.get_height() / 2))
+        self.coin_rect = self.coin_image.get_rect(x=self.balance_rect.x + 15, centery=self.balance_rect.centery)
         self.active = False
 
     def draw(self, screen):
         if self.active == True:
+            self.player.active = False
             self.bought_endtimer += CLOCK.get_time()
             pygame.draw.rect(screen, (100, 100, 100), self.main_rect, border_radius=20)
             self.head.draw(screen)
             self.draw_balance(screen)
+            self.draw_exit_rect(screen)
             pygame.draw.rect(screen, (80, 80, 80), self.sub_rect, border_radius=10)
             self.rows_name.draw(screen)
             for weapon in self.weapons:
@@ -83,14 +91,31 @@ class Trader_menu:
             if self.bought_endtimer >= 1000:
                 self.bought_endtimer = 500
 
-    def draw_balance(self,screen):
-        pygame.draw.rect(screen,(80, 80, 80),self.balance_rect,border_radius=10)
-        screen.blit(self.coin_image,self.coin_rect)
+    def draw_balance(self, screen):
+        pygame.draw.rect(screen, (80, 80, 80), self.balance_rect, border_radius=10)
+        screen.blit(self.coin_image, self.coin_rect)
         self.draw_balance_text(screen)
-    def draw_balance_text(self,screen):
+
+    def draw_balance_text(self, screen):
         text_image = FONT_CALIBRI_50.render(str(self.player_balance), True, (255, 215, 0))
-        text_rect = text_image.get_rect(x=self.balance_rect.centerx,centery=self.balance_rect.centery)
-        screen.blit(text_image,text_rect)
+        text_rect = text_image.get_rect(x=self.balance_rect.centerx, centery=self.balance_rect.centery)
+        screen.blit(text_image, text_rect)
+
+    def draw_exit_rect(self, screen):
+        pygame.draw.rect(screen, (240, 10, 10), self.exit_rect, border_radius=10)
+        self.draw_exit_text(screen)
+        self.exit_store_button()
+    def draw_exit_text(self, screen):
+        text_image = FONT_BOOK_ANTIQUA_40.render("Выход", True, (240, 240, 240))
+        text_rect = text_image.get_rect(centerx=self.exit_rect.centerx, centery=self.exit_rect.centery)
+        screen.blit(text_image, text_rect)
+
+    def exit_store_button(self):
+        mousepos = pygame.mouse.get_pos()
+        if self.exit_rect.collidepoint(mousepos):
+            if pygame.mouse.get_pressed()[0]:
+                self.player.active = True
+                self.active = False
 
 class Trader_menu_row:
     def __init__(self, pos, info, item_inv):
@@ -313,6 +338,7 @@ class Player:
                           9: (wall_gap + 400 + self.bg_inventory.x + gap * 2,
                               wall_gap + 400 + self.bg_inventory.y + gap * 2),
                           }
+        self.coins = 1000
 
     def draw(self, screen, ):
         pygame.draw.rect(screen, self.color, self.rect)
@@ -365,6 +391,7 @@ class Player:
                 return True, num
         return False, None
 
+
 if __name__ == '__main__':
     w, h = (1920, 1080)
     screensize = w, h
@@ -372,7 +399,8 @@ if __name__ == '__main__':
     yellow = (240, 240, 0)
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode(screensize)
-    menu = Trader_menu()
+    menu = Trader_menu(Player(0, 0, 10, 10))
+    menu.active = True
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
