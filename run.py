@@ -4,7 +4,6 @@ from main import *
 import sys
 
 
-
 main = Main()
 
 while True:
